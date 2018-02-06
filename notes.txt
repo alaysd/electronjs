@@ -1,0 +1,83 @@
+4 main features of es6 used in electron
+--> const keyword
+--> let keyword
+--> arrow fucntion
+--> template literals
+
+There is only 1 main process and main process can create many new Rendere process.
+Main process creates the webpages while the renderer process handles the processes inside the praticular window
+
+		Nodejs(main)
+		  /   \
+	   /	   \
+	  /		    \
+  Renderer   Renderer(chromium)
+
+
+main.js is the main process inside electron which is defines in package.json which can be changed
+
+
+app.on('ready', createWindow)  from where first renderer process starts.
+
+
+// Create the browser window.
+  mainWindow = new BrowserWindow({width: 800, height: 600})
+
+  // and load the index.html of the app.
+  mainWindow.loadURL(url.format({
+    pathname: path.join(__dirname, 'index.html'),
+    protocol: 'file:',
+    slashes: true
+  }))
+
+
+electron-reload to electronjs is like nodemon to nodejs
+
+
+for native library install through npm, make a file named electron-npm with contents:
+
+# Electron's version.
+export npm_config_target=1.7.12
+# The architecture of Electron, can be ia32 or x64.
+export npm_config_arch=x64
+export npm_config_target_arch=x64
+# Download headers for Electron.
+export npm_config_disturl=https://atom.io/download/electron
+# Tell node-pre-gyp that we are building for Electron.
+export npm_config_runtime=electron
+# Tell node-pre-gyp to build module from source code.
+export npm_config_build_from_source=true
+# Install all dependencies, and store cache to ~/.electron-gyp.
+npm install $1
+
+
+in above you need to change electron's version and unless we run a 32 bit machine then we need to change according likt npm_config_arch variable
+chmod +x electron-npm, as it is an shell script
+after this while installing a package do it by ./electron-npm packagename
+
+devtron is a debugging tool of chromium with few more features by electron
+
+Electron api-
+main 3 will be used: Main Process, Render Process and Shared
+
+API: Main Process
+
+electron.app- controls events from app launch to app quitting https://electronjs.org/docs/api/app
+
+
+electron.app
+
+BrowserWindows behave significantly different on different platforms. eg. modal parameter is different on differen platforms
+
+parent-child relationship in windows
+
+frameless window is essentially a browser  window without any OS interface components like toolbars. Eg. apple's quicktime player
+
+--->BrowserWindow events are important to be seen.
+				responsive and unresponsive are also important events.
+				setAlwaysOnTop is also a good once
+				reload, getParentWindow
+
+electron-window-state is a npm package for store and restore window sizes and positions for app
+
+webContents is another important property of BrowserWindow object
