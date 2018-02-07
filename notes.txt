@@ -14,7 +14,7 @@ Main process creates the webpages while the renderer process handles the process
   Renderer   Renderer(chromium)
 
 
-main.js is the main process inside electron which is defines in package.json which can be changed
+main.js is the main process inside electron which is defined in package.json which can be changed
 
 
 app.on('ready', createWindow)  from where first renderer process starts.
@@ -67,7 +67,7 @@ electron.app- controls events from app launch to app quitting https://electronjs
 
 electron.app
 
-BrowserWindows behave significantly different on different platforms. eg. modal parameter is different on differen platforms
+BrowserWindows behave significantly different on different platforms. eg. modal parameter is different on different platforms
 
 parent-child relationship in windows
 
@@ -81,3 +81,28 @@ frameless window is essentially a browser  window without any OS interface compo
 electron-window-state is a npm package for store and restore window sizes and positions for app
 
 webContents is another important property of BrowserWindow object
+Think of BrowserWindow as where the contents will be loaded and webContents as the actual content itself.
+we access webContents in BrowserWindow from object of webContents
+1. events: did-fail-load, did-get-response-details
+2. use event login for content on basic password auth in app (e.g. in about.html)
+3. executeJavascript for remote javascript
+
+
+sessions help manage state of the app, like managing cookies, downloads, and proxy setting
+create session in persistent and in memory
+Custom session
+
+session: cookies
+session: DownloadItem
+accelerator : define keyboard shortcuts, string representation of keyboard
+
+mainMenu=new Menu() appends new MenuItem();  setApplication in app.on('ready',()=>{createWindow();Menu.setApplicationMenu(mainMenu);})
+
+interacting with tray of mac or linux os
+
+powerMonitor is important in case of meeting
+
+InterProcessCommunication helps us send messages between main and renderer processes.
+ipc by default sends data asynchronously 
+
+---> app to create must not close and must always work in background. e.g. Skype
