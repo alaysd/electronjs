@@ -103,6 +103,33 @@ interacting with tray of mac or linux os
 powerMonitor is important in case of meeting
 
 InterProcessCommunication helps us send messages between main and renderer processes.
-ipc by default sends data asynchronously 
+ipc by default sends data asynchronously .
+we can send synchronous data from renderer
+
+remote:
+In Electron, GUI-related modules (such as dialog, menu etc.) are only available in the main process, not in the renderer process.
+In order to use them from the renderer process, the ipc module is necessary to send inter-process messages to the main process.
+With the remote module, you can invoke methods of the main process object without explicitly sending inter-process messages, similar to Java's RMI.
+remote module simply passes the intention to main module and the dialog instance exits entirely on the main process, which will be garbage collected once
+we are done with it. Make sure to unregister the remote once you are done with it as to prevent memory leaks.
+In the dialog if you dont want to stop the background even you must use a callback.
+
+BrowserWindowProxy object is an instance of BrowserWindow that gets returned from the native window.open method and provides some control over BrowserWindows
+
+process shared api for electron version , resourcesPath
+process.hang can be used to block logoff before 8 hrs
+
+screen is used by both renderer and mainprocess
+shell handles the remote resources, more often used for local file resources.
+
+clipboard for clipboard of systems
+
+Detect whether there is internet connection or not;
+window.addEventListener('online',()=>{
+	console.log('User online');
+})
+window.addEventListener('offline',()=>{
+	console.log('User offline');
+}) // You can send the data to mainprocess by ipc
 
 ---> app to create must not close and must always work in background. e.g. Skype

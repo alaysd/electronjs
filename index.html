@@ -29,6 +29,45 @@
     <a href="about.html">About</a>
     <br>
     <a href="https://unsplash.com/photos/OebG8b-eOXI/download?force=true">Download Image</a>
+    <br><br>
+    <a onclick="open_win()">Github</a>
+    <a onclick="close_win()">Close Github</a>
+    <a id = "youtube">Youtube</a>
+
+    <br><br>
+    <img src="icon.png"/>
+    <button id = "zoom_up">Zoom up</button>
+    <button id = "zoom_down">Zoom down</button>
+    <script>
+      let win
+      const open_win = function(){
+        win = window.open('http:www.github.com')
+      }
+      const close_win = function(){
+        win.close();
+      }
+      document.getElementById('youtube').addEventListener('click',()=>{
+        win = window.open('http://www.youtube.com');
+      })
+
+      const {webFrame} = require('electron');
+      let zoom=0;
+      document.getElementById('zoom_up').addEventListener('click',()=>{
+        webFrame.setZoomLevel(++zoom);
+      })
+      document.getElementById('zoom_down').addEventListener('click',()=>{
+        webFrame.setZoomLevel(--zoom);
+      })
+      console.log(`Resources path ${process.resourcesPath}`);
+
+      window.addEventListener('online',()=>{
+        console.log('User online');
+      })
+      window.addEventListener('offline',()=>{
+        console.log('User offline');
+      })
+    </script>
+
     <script>
       require('./renderer.js')
     </script>

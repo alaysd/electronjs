@@ -12,12 +12,20 @@ const myPlaintextPassword = 'xyz';
 const someOtherPlaintextPassword = 'not_bacon';
 const windowStateKeeper = require('electron-window-state');
 
+global['app_version'] =1.1;
+
+app.dock.setIcon('icon.png')
 
 bcrypt.genSalt(saltRounds, function(err, salt) {
     bcrypt.hash(myPlaintextPassword, salt, function(err, hash) {
         console.log('Mypassowrd',hash);
     });
 });
+
+app.disableHardwareAcceleration()
+
+let bgWin;
+
 // require('devtron').install()
 
 // app.on('browser-window-focus',()=>{
@@ -90,20 +98,27 @@ bcrypt.genSalt(saltRounds, function(err, salt) {
       console.log('tray clicked man xD');
       win.isVisible() ? win.hide() : win.show();
     })
+
     tray.setToolTip('AlayDhagia')
-
-
   }
 
 
-  ipcMain.on('chan',(e, args)=>{
-    console.log('Args',args);
-    e.sender.send('chan','Message recieved man')
-  })
-
+  // ipcMain.on('chan',(e, args)=>{
+  //   console.log('Args:',args);
+  //   e.sender.send('chan','Message recieved man')
+  // })
+  //
+  // ipcMain.on('chan2',(e,args)=>{
+  //   console.log(args);
+  //   e.sender.send('chan2','Message received from 2');
+  //   });
+  //
+  // // Synchronous ipcMain
+  // ipcMain.on('sync-channel',(e,args)=>{
+  //       console.log('Sync message:',args.name);
+  //       e.returnValue =  'a synchronous response from the main process';
+  // })
 function createWindow(){
-
-
   // Custom session- it will not be persisted by default
   // let appSession = session.fromPartition('parition1')//This partition1 is type of disk location and can be accesed by this string
   // To create persisted custom session save the name of string as persist:yourstring
@@ -119,7 +134,7 @@ function createWindow(){
   //win = new BrowserWindow({width:1200,height:600,frame:false,minWidth:480,minHeight:600})
   // childWindow = new BrowserWindow({width:800,height:500,parent:win, modal:true,show:false});
   //childWindow = new BrowserWindow({width:800,height:500,parent:win, show:false});
-  win = new BrowserWindow({width:1200,height:800})
+  win = new BrowserWindow({width:1400,height:1000})
   win.loadURL(url.format({
     pathname: path.join(__dirname,'index.html'),
     protocol: 'file:',
@@ -140,6 +155,10 @@ function createWindow(){
   })
   setTimeout(showDialog, 2000);
   // win.loadURL("http://github.com")
+
+  // win.webContents.on('did-finish-load',()=>{
+  //   win.webContents.send('private','Message from the president Underwood');
+  // })
 
   let defaultSession = session.defaultSession;
 
@@ -248,15 +267,17 @@ function createWindow(){
   // winContents.on('new-window',(e,url)=>{
   //   console.log('new window created for:',url);
   // });
-  winContents.on('new-window',(e,url)=>{
-    console.log('new window created for:',url);
-    e.preventDefault();
-    let modalWindow = new BrowserWindow({width:800,height:500,modal:true,parent:win})
-    modalWindow.loadURL(url);
-    modalWindow.on('closed',function(){
-      modalWindow=null;
-    })
-  });
+
+  // winContents.on('new-window',(e,url)=>{
+  //   console.log('new window created for:',url);
+  //   e.preventDefault();
+  //   let modalWindow = new BrowserWindow({width:800,height:500,modal:true,parent:win, frame:true})
+  //   modalWindow.loadURL(url);
+  //   modalWindow.on('closed',function(){
+  //     modalWindow=null;
+  //   })
+  // });
+
   // winContents.on('will-navigate',(e,url)=>{
   //   console.log('WILL navigate to',url);
   // });
@@ -315,6 +336,7 @@ app.setBadgeCount(22);
 //     win = null;
 //   })
 // });
+var fs = require('fs');
 app.on('ready',()=>{
   createWindow();
   createTray();
@@ -326,6 +348,27 @@ app.on('ready',()=>{
   electron.powerMonitor.on('resume',()=>{
     console.log('System resumed');
   })
+
+  bgWin = new BrowserWindow({
+    show:false,
+    width:1200,
+    height:800,
+    webPreferences:{
+      offscreen: true
+    }
+  });
+  bgWin.loadURL('http://github.com')
+  // bgWin.webContents.on('did-finish-load',()=>{
+  //   console.log('bgWin Contents',bgWin.getTitle());
+  //   app.quit();
+  // })
+  let i=1;
+  // bgWin.webContents.on('paint',(e, dirtyArea, nativeImage)=>{
+  //
+  //   let img = nativeImage.toPNG();
+  //   fs.writeFile(`/Users/alay.dhagia/Documents/ElectronJs/udemtLectures/electronjs/screenshot_${i}.png`,img);
+  //   i++;
+  // })
 });
 app.on('window-all-closed',()=>{
   if (process.platform !== 'darwin') {
